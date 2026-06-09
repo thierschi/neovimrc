@@ -1,0 +1,6 @@
+require("thierschi.set")
+require("thierschi.remap")
+require("thierschi.theme")
+require("thierschi.syntax")
+-- require("thierschi.deadcolumn")
+require("thierschi.whitespace")
