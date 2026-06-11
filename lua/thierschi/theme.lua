@@ -5,4 +5,13 @@ vim.pack.add({
 	},
 })
 require("rose-pine").setup()
-vim.cmd("colorscheme rose-pine")
+
+vim.pack.add({
+	{
+		src = "https://github.com/tomasr/molokai",
+		name = "molokai",
+	},
+})
+
+
+vim.cmd("colorscheme molokai")
