@@ -44,9 +44,32 @@ vim.keymap.set("n", "<leader>e", vim.diagnostic.open_float)
 vim.keymap.set("n", "[d", vim.diagnostic.goto_prev)
 vim.keymap.set("n", "]d", vim.diagnostic.goto_next)
 
--- Auto popup on hover
+local diag_float_win = nil
+
+-- Show diagnostics on hover
 vim.api.nvim_create_autocmd("CursorHold", {
   callback = function()
-    vim.diagnostic.open_float(nil, { focus = false })
+    if diag_float_win and vim.api.nvim_win_is_valid(diag_float_win) then
+      vim.api.nvim_win_close(diag_float_win, true)
+    end
+
+    local _, win = vim.diagnostic.open_float(nil, {
+      focus = false,
+      scope = "cursor",
+    })
+
+    diag_float_win = win
   end,
 })
+
+-- Close the float when moving / switching buffers
+vim.api.nvim_create_autocmd({ "CursorMoved", "BufLeave", "InsertEnter", "WinLeave" }, {
+  callback = function()
+    if diag_float_win and vim.api.nvim_win_is_valid(diag_float_win) then
+      vim.api.nvim_win_close(diag_float_win, true)
+      diag_float_win = nil
+    end
+  end,
+})
+
+vim.o.updatetime = 300
